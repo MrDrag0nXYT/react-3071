@@ -1,95 +1,103 @@
+import React, { useState } from "react";
+
 import "./styles/Item.css";
+import ItemAddForm from "./ItemAddForm";
 
 const Item = () => {
-  let itemArray = [
-    {
-      id: 1,
-      description: "Вопрос 1",
+  const [itemArray, setItemArray] = useState([]);
+  const [userAnswers, setUserAnswers] = useState({});
+  const [showAnswers, setShowAnswers] = useState(false);
 
-      option1: "Первый вариант",
-      option2: "Второй вариант",
-      option3: "Третий вариант",
-      option4: "Четвёртый вариант",
+  const handleFormSubmit = (formData) => {
+    setItemArray([...itemArray, formData]);
+  };
 
-      correct: "Третий вариант",
-    },
-    {
-      id: 2,
-      description: "Вопрос 2",
+  const handleOptionChange = (itemId, option) => {
+    setUserAnswers({ ...userAnswers, [itemId]: option });
+  };
 
-      option1: "Первый вариант",
-      option2: "Второй вариант",
-      option3: "Третий вариант",
-      option4: "Четвёртый вариант",
+  const handleShowAnswers = () => {
+    setShowAnswers(true);
+  };
 
-      correct: "Первый вариант",
-    },
-    {
-      id: 3,
-      description: "Вопрос 3",
+  const pageContent = itemArray.map((item, index) => {
+    const userAnswer = userAnswers[index];
+    const isCorrect = showAnswers && userAnswer === item.correct;
 
-      option1: "Первый вариант",
-      option2: "Второй вариант",
-      option3: "Третий вариант",
-      option4: "Четвёртый вариант",
-
-      correct: "Второй вариант",
-    },
-    {
-      id: 4,
-      description: "Вопрос 4",
-
-      option1: "Первый вариант",
-      option2: "Второй вариант",
-      option3: "Третий вариант",
-      option4: "Четвёртый вариант",
-
-      correct: "Четвёртый вариант",
-    },
-    {
-      id: 5,
-      description: "Вопрос 5",
-
-      option1: "Первый вариант",
-      option2: "Второй вариант",
-      option3: "Третий вариант",
-      option4: "Четвёртый вариант",
-
-      correct: "Второй вариант",
-    },
-  ];
-
-  let pageContent = itemArray.map((item) => {
     return (
-      <div>
+      <div key={index}>
         <h3>{item.description}</h3>
 
         <div className="options">
           <div>
-            <input id={`${`option-1-${item.id}`}`} type="radio" name={`${`option${item.id}`}`} />
-            <label for={`${`option-1-${item.id}`}`}>{item.option1}</label>
+            <input
+              id={`option-1-${index}`}
+              type="radio"
+              name={`option${index}`}
+              checked={userAnswer === item.option1}
+              onChange={() => handleOptionChange(index, item.option1)}
+              disabled={showAnswers}
+            />
+            <label htmlFor={`option-1-${index}`}>{item.option1}</label>
           </div>
 
           <div>
-            <input id={`${`option-2-${item.id}`}`} type="radio" name={`${`option${item.id}`}`} />
-            <label for={`${`option-2-${item.id}`}`}>{item.option2}</label>
+            <input
+              id={`option-2-${index}`}
+              type="radio"
+              name={`option${index}`}
+              checked={userAnswer === item.option2}
+              onChange={() => handleOptionChange(index, item.option2)}
+              disabled={showAnswers}
+            />
+            <label htmlFor={`option-2-${index}`}>{item.option2}</label>
           </div>
 
           <div>
-            <input id={`${`option-3-${item.id}`}`} type="radio" name={`${`option${item.id}`}`} />
-            <label for={`${`option-3-${item.id}`}`}>{item.option3}</label>
+            <input
+              id={`option-3-${index}`}
+              type="radio"
+              name={`option${index}`}
+              checked={userAnswer === item.option3}
+              onChange={() => handleOptionChange(index, item.option3)}
+              disabled={showAnswers}
+            />
+            <label htmlFor={`option-3-${index}`}>{item.option3}</label>
           </div>
 
           <div>
-            <input id={`${`option-4-${item.id}`}`} type="radio" name={`${`option${item.id}`}`} />
-            <label for={`${`option-4-${item.id}`}`}>{item.option4}</label>
+            <input
+              id={`option-4-${index}`}
+              type="radio"
+              name={`option${index}`}
+              checked={userAnswer === item.option4}
+              onChange={() => handleOptionChange(index, item.option4)}
+              disabled={showAnswers}
+            />
+            <label htmlFor={`option-4-${index}`}>{item.option4}</label>
           </div>
         </div>
+        {showAnswers && (
+          <p className={isCorrect ? "correct" : "incorrect"}>
+            {isCorrect
+              ? "Правильно!"
+              : `Неправильно. Правильный ответ: ${item.correct}`}
+          </p>
+        )}
       </div>
     );
   });
 
-  return pageContent;
+  return (
+    <>
+      <ItemAddForm onFormSubmit={handleFormSubmit} />
+
+      <button className="button" onClick={handleShowAnswers} disabled={showAnswers}>
+        Узнать ответы
+      </button>
+      {pageContent}
+    </>
+  );
 };
 
 export default Item;

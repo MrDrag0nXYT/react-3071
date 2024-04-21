@@ -1,5 +1,6 @@
 :root {
   --bg-secondary-color: #f5f0f0;
+  --bg-tertiary-color: #e5e0e0;
   --bg-color: #fffafa;
   --text-color: #151515;
   --accent-color: #a880ff;
@@ -36,7 +37,8 @@ body {
 
   transition: 0.3s ease;
 
-  background-color: var(--bg-secondary-color);
+  background-color: var(--bg-tertiary-color);
+  border: none;
 }
 
 .button:hover {
